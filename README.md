@@ -11,6 +11,7 @@ Setup:
   * activate the environment
     * .venv\Scripts\activate.bat
 * install the required packages
+  * if necessary, change directory to the top of the cloned folder
   * pip install -r requirements.txt
 
 Use:
