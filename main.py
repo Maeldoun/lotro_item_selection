@@ -137,19 +137,19 @@ df_stats_sum = ddb.sql(
 df_ev = ddb.sql(
     """
     SELECT ss.*
-        ,ss.Physical_Mastery_Rating / (SELECT Value FROM df_et where Stat = 'Physical_Mastery_Rating') as Physical_Mastery_Rating_Essence_Value
-        ,ss.Tactical_Mastery_Rating / (SELECT Value FROM df_et where Stat = 'Tactical_Mastery_Rating') as Tactical_Mastery_Rating_Essence_Value
-        ,ss.Physical_Mitigation / (SELECT Value FROM df_et where Stat = 'Physical_Mitigation') as Physical_Mitigation_Essence_Value
-        ,ss.Tactical_Mitigation / (SELECT Value FROM df_et where Stat = 'Tactical_Mitigation') as Tactical_Mitigation_Essence_Value
-        ,ss.Critical_Rating / (SELECT Value FROM df_et where Stat = 'Critical_Rating') as Critical_Rating_Essence_Value
-        ,ss.Critical_Defense / (SELECT Value FROM df_et where Stat = 'Critical_Defense') as Critical_Defense_Essence_Value
-        ,ss.Finesse_Rating / (SELECT Value FROM df_et where Stat = 'Finesse_Rating') as Finesse_Rating_Essence_Value
-        ,ss.Block_Rating / (SELECT Value FROM df_et where Stat = 'Block_Rating') as Block_Rating_Essence_Value
-        ,ss.Parry_Rating / (SELECT Value FROM df_et where Stat = 'Parry_Rating') as Parry_Rating_Essence_Value
-        ,ss.Evade_Rating / (SELECT Value FROM df_et where Stat = 'Evade_Rating') as Evade_Rating_Essence_Value
-        ,ss.Outgoing_Healing_Rating / (SELECT Value FROM df_et where Stat = 'Outgoing_Healing_Rating') as Outgoing_Healing_Rating_Essence_Value
-        ,ss.Incoming_Healing_Rating / (SELECT Value FROM df_et where Stat = 'Incoming_Healing_Rating') as Incoming_Healing_Rating_Essence_Value
-        ,ss.Resistance_Rating / (SELECT Value FROM df_et where Stat = 'Resistance_Rating') as Resistance_Rating_Essence_Value
+        ,round(ss.Physical_Mastery_Rating / (SELECT Value FROM df_et where Stat = 'Physical_Mastery_Rating'), 2) as Physical_Mastery_Rating_Essence_Value
+        ,round(ss.Tactical_Mastery_Rating / (SELECT Value FROM df_et where Stat = 'Tactical_Mastery_Rating'), 2) as Tactical_Mastery_Rating_Essence_Value
+        ,round(ss.Physical_Mitigation / (SELECT Value FROM df_et where Stat = 'Physical_Mitigation'), 2) as Physical_Mitigation_Essence_Value
+        ,round(ss.Tactical_Mitigation / (SELECT Value FROM df_et where Stat = 'Tactical_Mitigation'), 2) as Tactical_Mitigation_Essence_Value
+        ,round(ss.Critical_Rating / (SELECT Value FROM df_et where Stat = 'Critical_Rating'), 2) as Critical_Rating_Essence_Value
+        ,round(ss.Critical_Defense / (SELECT Value FROM df_et where Stat = 'Critical_Defense'), 2) as Critical_Defense_Essence_Value
+        ,round(ss.Finesse_Rating / (SELECT Value FROM df_et where Stat = 'Finesse_Rating'), 2) as Finesse_Rating_Essence_Value
+        ,round(ss.Block_Rating / (SELECT Value FROM df_et where Stat = 'Block_Rating'), 2) as Block_Rating_Essence_Value
+        ,round(ss.Parry_Rating / (SELECT Value FROM df_et where Stat = 'Parry_Rating'), 2) as Parry_Rating_Essence_Value
+        ,round(ss.Evade_Rating / (SELECT Value FROM df_et where Stat = 'Evade_Rating'), 2) as Evade_Rating_Essence_Value
+        ,round(ss.Outgoing_Healing_Rating / (SELECT Value FROM df_et where Stat = 'Outgoing_Healing_Rating'), 2) as Outgoing_Healing_Rating_Essence_Value
+        ,round(ss.Incoming_Healing_Rating / (SELECT Value FROM df_et where Stat = 'Incoming_Healing_Rating'), 2) as Incoming_Healing_Rating_Essence_Value
+        ,round(ss.Resistance_Rating / (SELECT Value FROM df_et where Stat = 'Resistance_Rating'), 2) as Resistance_Rating_Essence_Value
     FROM df_stats_sum ss
     """
 )
@@ -157,9 +157,9 @@ df_ev = ddb.sql(
 # %% acquiring total essence values
 df_final = ddb.sql(
     f"""
-    SELECT *
-        ,Primary_Essence + Vital_Essence + Basic_Essence + Physical_Mastery_Rating_Essence_Value + Tactical_Mastery_Rating_Essence_Value + Physical_Mitigation_Essence_Value + Tactical_Mitigation_Essence_Value + Critical_Rating_Essence_Value + Critical_Defense_Essence_Value + Finesse_Rating_Essence_Value + Block_Rating_Essence_Value + Parry_Rating_Essence_Value + Evade_Rating_Essence_Value + Outgoing_Healing_Rating_Essence_Value + Incoming_Healing_Rating_Essence_Value + Resistance_Rating_Essence_Value as Total_Essence_Value
+    SELECT Primary_Essence + Vital_Essence + Basic_Essence + Physical_Mastery_Rating_Essence_Value + Tactical_Mastery_Rating_Essence_Value + Physical_Mitigation_Essence_Value + Tactical_Mitigation_Essence_Value + Critical_Rating_Essence_Value + Critical_Defense_Essence_Value + Finesse_Rating_Essence_Value + Block_Rating_Essence_Value + Parry_Rating_Essence_Value + Evade_Rating_Essence_Value + Outgoing_Healing_Rating_Essence_Value + Incoming_Healing_Rating_Essence_Value + Resistance_Rating_Essence_Value as Total_Essence_Value
         ,Primary_Essence + Vital_Essence + Basic_Essence + {query_stats} as Total_Selected_Essence_Value
+        ,*
     FROM df_ev 
     ORDER BY Total_Selected_Essence_Value desc
     LIMIT {count_items_to_show}
@@ -168,7 +168,17 @@ df_final = ddb.sql(
 # df_final.show(max_width=1000)
 # %% send to file
 print(f"Results of {l_class}, {equipment_slot}, and {query_stats}")
-print(df_final)
+print(
+    ddb.sql(
+        """
+        SELECT ItemID
+            ,Name
+            ,Total_Essence_Value
+            ,Total_Selected_Essence_Value
+        FROM df_final
+        """
+    )
+)
 df_final.to_csv(r".\top_items.csv")
 
 # %%
