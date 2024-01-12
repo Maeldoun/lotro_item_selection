@@ -7,6 +7,20 @@ df_control = pd.read_excel(
     r".\150ItemInfo.ods",
     sheet_name="Control",
 )
+class_primary = {
+    "Beorning": "Might",
+    "Brawler": "Might",
+    "Burglar": "Agility",
+    "Captain": "Might",
+    "Champion": "Might",
+    "Guardian": "Might",
+    "Hunter": "Agility",
+    "Loremaster": "Will",
+    "Mariner": "Agility",
+    "Minstrel": "Will",
+    "Runekeeper": "Will",
+    "Warden": "Agility",
+}
 l_class = df_control.iloc[0]["L_CLASS"]
 equipment_slot = df_control.iloc[0]["EquipSlot"]
 essence_tier = df_control.iloc[0]["EssenceTier"]
@@ -20,7 +34,14 @@ not_maw = [i for i in range(32) if i not in maw]
 df_idb_maw = pd.read_excel(
     r".\150ItemInfo.ods",
     sheet_name="IDB",
-    usecols=["ItemID", "Might", "Agility", "Will", "EquipSlot"],
+    usecols=[
+        "ItemID",
+        "Might",
+        "Agility",
+        "Will",
+        "EquipSlot",
+        "PrimaryEssence",
+    ],
 ).fillna(0)
 df_idb_not_maw = pd.read_excel(
     r".\150ItemInfo.ods",
@@ -40,16 +61,25 @@ df_msd = pd.read_excel(
 df_msd = df_msd.loc[df_msd["L_CLASS"] == l_class]
 df_idb_maw = df_idb_maw.loc[df_idb_maw["EquipSlot"] == equipment_slot]
 df_idb_not_maw = df_idb_not_maw.loc[df_idb_not_maw["EquipSlot"] == equipment_slot]
+# df_idb_maw = df_idb_maw.loc[df_idb_maw["ItemID"] == 1879477437]
+# df_idb_not_maw = df_idb_not_maw.loc[df_idb_not_maw["ItemID"] == 1879477437]
+primary_essence_stat_rating = df_et.loc[df_et["Stat"] == class_primary[l_class]][
+    "Value"
+]
 
 # %% preparing item list to explode the mainstat into derrivative stats
+# accounting for primary essences
+df_idb_maw["PrimaryEssence"] = df_idb_maw["PrimaryEssence"].apply(
+    lambda x: x * primary_essence_stat_rating
+)
+# rotating data for joining
+df_idb_maw[class_primary[l_class]] = (
+    df_idb_maw[class_primary[l_class]] + df_idb_maw["PrimaryEssence"]
+)
 df_idb_unpivot = pd.melt(
     df_idb_maw,
     id_vars="ItemID",
-    value_vars=[
-        "Might",
-        "Agility",
-        "Will",
-    ],
+    value_vars=["Might", "Agility", "Will"],
     var_name="Mainstat",
 )
 
@@ -165,7 +195,7 @@ df_final = ddb.sql(
     LIMIT {count_items_to_show}
     """
 )
-# df_final.show(max_width=1000)
+
 # %% send to file
 print(f"Results of {l_class}, {equipment_slot}, and {query_stats}")
 print(
