@@ -16,6 +16,6 @@ Setup:
 Use:
 * Update the 150ItemInfo.ods file's "Control" sheet with the desired class, stats, equipment slot, etc
 * Run the python script from your virtual environment (assming you're still in an active environment)
-*   python main.py
+  * python main.py
 * You should get a screen that shows the item and a new file should be created in the current directory called top_items.csv.
 * You can review that csv file for more details.
