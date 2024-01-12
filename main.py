@@ -167,6 +167,7 @@ df_final = ddb.sql(
 )
 # df_final.show(max_width=1000)
 # %% send to file
+print(f"Results of {l_class}, {equipment_slot}, and {query_stats}")
 print(df_final)
 df_final.to_csv(r".\top_items.csv")
 
