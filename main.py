@@ -61,8 +61,8 @@ df_msd = pd.read_excel(
 df_msd = df_msd.loc[df_msd["L_CLASS"] == l_class]
 df_idb_maw = df_idb_maw.loc[df_idb_maw["EquipSlot"] == equipment_slot]
 df_idb_not_maw = df_idb_not_maw.loc[df_idb_not_maw["EquipSlot"] == equipment_slot]
-# df_idb_maw = df_idb_maw.loc[df_idb_maw["ItemID"] == 1879477437]
-# df_idb_not_maw = df_idb_not_maw.loc[df_idb_not_maw["ItemID"] == 1879477437]
+# df_idb_maw = df_idb_maw.loc[df_idb_maw["ItemID"] == 1879477676]
+# df_idb_not_maw = df_idb_not_maw.loc[df_idb_not_maw["ItemID"] == 1879477676]
 primary_essence_stat_rating = df_et.loc[df_et["Stat"] == class_primary[l_class]][
     "Value"
 ]
@@ -82,27 +82,28 @@ df_idb_unpivot = pd.melt(
     value_vars=["Might", "Agility", "Will"],
     var_name="Mainstat",
 )
-
+# print(df_idb_unpivot)
 # %% exploding the mainstat into derrivative stats
 df_derived_stats = ddb.sql(
     """
     SELECT i.ItemID
-        ,i.value * msd.Block as Block
-        ,i.value * msd.Critical_Rating as Critical_Rating
-        ,i.value * msd.Evade as Evade
-        ,i.value * msd.Finesse as Finesse
-        ,i.value * msd.Outgoing_Healing as Outgoing_Healing
-        ,i.value * msd.Parry as Parry
-        ,i.value * msd.Physical_Mastery as Physical_Mastery
-        ,i.value * msd.Physical_Mitigation as Physical_Mitigation
-        ,i.value * msd.Resistance as Resistance
-        ,i.value * msd.Tactical_Mastery as Tactical_Mastery
-        ,i.value * msd.Tactical_Mitigation as Tactical_Mitigation
+        ,SUM(i.value * msd.Block) as Block
+        ,SUM(i.value * msd.Critical_Rating) as Critical_Rating
+        ,SUM(i.value * msd.Evade) as Evade
+        ,SUM(i.value * msd.Finesse) as Finesse
+        ,SUM(i.value * msd.Outgoing_Healing) as Outgoing_Healing
+        ,SUM(i.value * msd.Parry) as Parry
+        ,SUM(i.value * msd.Physical_Mastery) as Physical_Mastery
+        ,SUM(i.value * msd.Physical_Mitigation) as Physical_Mitigation
+        ,SUM(i.value * msd.Resistance) as Resistance
+        ,SUM(i.value * msd.Tactical_Mastery) as Tactical_Mastery
+        ,SUM(i.value * msd.Tactical_Mitigation) as Tactical_Mitigation
     FROM df_idb_unpivot as i 
     JOIN df_msd as msd on i.Mainstat = msd.Mainstat
+    GROUP BY i.ItemID
     """
 )
-
+# print(df_derived_stats.show(max_width=1000))
 # %% unifying main stat derrivatives and item stats
 df_stats_sum = ddb.sql(
     """
@@ -162,7 +163,8 @@ df_stats_sum = ddb.sql(
         ,i.EquipSlot
     """
 )
-
+print(df_idb_not_maw)
+print(df_stats_sum.show(max_width=1000))
 # %% calculating essence values from unified items stats
 df_ev = ddb.sql(
     """
@@ -187,8 +189,8 @@ df_ev = ddb.sql(
 # %% acquiring total essence values
 df_final = ddb.sql(
     f"""
-    SELECT Primary_Essence + Vital_Essence + Basic_Essence + Physical_Mastery_Rating_Essence_Value + Tactical_Mastery_Rating_Essence_Value + Physical_Mitigation_Essence_Value + Tactical_Mitigation_Essence_Value + Critical_Rating_Essence_Value + Critical_Defense_Essence_Value + Finesse_Rating_Essence_Value + Block_Rating_Essence_Value + Parry_Rating_Essence_Value + Evade_Rating_Essence_Value + Outgoing_Healing_Rating_Essence_Value + Incoming_Healing_Rating_Essence_Value + Resistance_Rating_Essence_Value as Total_Essence_Value
-        ,Primary_Essence + Vital_Essence + Basic_Essence + {query_stats} as Total_Selected_Essence_Value
+    SELECT Vital_Essence + Basic_Essence + Physical_Mastery_Rating_Essence_Value + Tactical_Mastery_Rating_Essence_Value + Physical_Mitigation_Essence_Value + Tactical_Mitigation_Essence_Value + Critical_Rating_Essence_Value + Critical_Defense_Essence_Value + Finesse_Rating_Essence_Value + Block_Rating_Essence_Value + Parry_Rating_Essence_Value + Evade_Rating_Essence_Value + Outgoing_Healing_Rating_Essence_Value + Incoming_Healing_Rating_Essence_Value + Resistance_Rating_Essence_Value as Total_Essence_Value
+        ,Vital_Essence + Basic_Essence + {query_stats} as Total_Selected_Essence_Value
         ,*
     FROM df_ev 
     ORDER BY Total_Selected_Essence_Value desc
