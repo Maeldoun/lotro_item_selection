@@ -210,8 +210,8 @@ for equipment_slot in equipment_slot_list:
             """
             SELECT ItemID
                 ,Name
-                ,Total_Essence_Value
-                ,Total_Selected_Essence_Value
+                ,round(Total_Essence_Value, 2) as Total_Essence_Value
+                ,round(Total_Selected_Essence_Value, 2) as Total_Selected_Essence_Value
             FROM df_final_equipment
             """
         )
@@ -225,6 +225,6 @@ for equipment_slot in equipment_slot_list:
         df_final.to_csv(r".\top_items.csv", mode="a", header=False)
 
 # %%
-input("Press the Enter key to continue: ")
+input("Press the Enter key to close (or x in top right)")
 
 # %%
