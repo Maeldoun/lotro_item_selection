@@ -1,7 +1,11 @@
 Purpose: 
 The purpose of this program is to allow the user to find the best items available considering the item slot and essence values
 
-Setup:
+Setup (main.exe):
+* If you trust me, then you can just clone down the 150ItemInfo.ods and the main.exe.
+* Run the main.exe and tell windows you're not scared to run it.
+
+Setup (Python):
 * Clone this repository
 * Open a cmd prompt or powershell prompt
 * cd to the cloned repository
