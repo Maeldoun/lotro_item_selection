@@ -26,7 +26,9 @@ Use:
 * You can review that csv file for more details.
 
 NOTE: the 150ItemInfo.ods was given to me, and I can't verify it's validity.
+
 NOTE: the csv that is generated will create if it doesn't exist or append to a created existing file.
 
 TODO: automate item lists
+
 TODO: make a gui, so the spreadsheet doesn't control it
