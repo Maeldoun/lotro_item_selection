@@ -24,7 +24,6 @@ class_primary = {
     "Warden": "Agility",
 }
 l_class = df_control.iloc[0]["L_CLASS"]
-equipment_slot = df_control.iloc[0]["EquipSlot"]
 essence_tier = df_control.iloc[0]["EssenceTier"]
 count_items_to_show = df_control.iloc[0]["count_items_to_show"]
 stats = df_control["Stat"].loc[df_control["Stat_Evaluate"] == 1].values.tolist()
