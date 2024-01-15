@@ -225,6 +225,6 @@ for equipment_slot in equipment_slot_list:
         df_final.to_csv(r".\top_items.csv", mode="a", header=False)
 
 # %%
-# input("Press the Enter key to continue: ")
+input("Press the Enter key to continue: ")
 
 # %%
