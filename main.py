@@ -5,10 +5,7 @@ import duckdb as ddb
 import pandas as pd
 
 # %% set controling variables
-df_control = pd.read_excel(
-    r".\150ItemInfo.ods",
-    sheet_name="Control",
-)
+df_control = pd.read_csv(r".\Control.csv")
 class_primary = {
     "Beorning": "Might",
     "Brawler": "Might",
@@ -36,9 +33,8 @@ for equipment_slot in equipment_slot_list:
     # %% build data dfs
     maw = [3, 4, 5]  # ["Might", "Agility", "Will"]
     not_maw = [i for i in range(32) if i not in maw]
-    df_idb_maw = pd.read_excel(
-        r".\150ItemInfo.ods",
-        sheet_name="IDB",
+    df_idb_maw = pd.read_csv(
+        r".\ItemDataBase.csv",
         usecols=[
             "ItemID",
             "Might",
@@ -48,19 +44,16 @@ for equipment_slot in equipment_slot_list:
             "PrimaryEssence",
         ],
     ).fillna(0)
-    df_idb_not_maw = pd.read_excel(
-        r".\150ItemInfo.ods",
-        sheet_name="IDB",
+    df_idb_not_maw = pd.read_csv(
+        r".\ItemDataBase.csv",
         usecols=not_maw,
     ).fillna(0)
-    df_et = pd.read_excel(
-        r".\150ItemInfo.ods",
-        sheet_name="EssenceTiers",
+    df_et = pd.read_csv(
+        r".\EssenceValues.csv",
         usecols=["Stat", essence_tier],
     ).rename(columns={essence_tier: "Value"})
-    df_msd = pd.read_excel(
-        r".\150ItemInfo.ods",
-        sheet_name="MainStatDerivations",
+    df_msd = pd.read_csv(
+        r".\MainStatDerivations.csv",
     )
     # %% Filter initals DFs according to the controlling variables
     df_msd = df_msd.loc[df_msd["L_CLASS"] == l_class]
