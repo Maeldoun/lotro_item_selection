@@ -33,36 +33,36 @@ equipment_slot_list = (
     df_control["EquipSlot"].loc[df_control["EquipSlot_Evaluate"] == 1].values.tolist()
 )
 
-# build data dfs
-maw = [3, 4, 5]  # ["Might", "Agility", "Will"]
-not_maw = [i for i in range(32) if i not in maw]
-df_idb_maw = pd.read_csv(
-    r".\data\ItemDatabase.csv",
-    usecols=[
-        "ItemID",
-        "Might",
-        "Agility",
-        "Will",
-        "EquipSlot",
-        "PrimaryEssence",
-    ],
-).fillna(0)
-df_idb_not_maw = pd.read_csv(
-    r".\data\ItemDatabase.csv",
-    usecols=not_maw,
-).fillna(0)
-df_et = pd.read_csv(
-    r".\data\EssenceValues.csv",
-    usecols=["Stat", essence_tier],
-).rename(columns={essence_tier: "Value"})
-df_msd = pd.read_csv(
-    r".\data\MainStatDerivations.csv",
-)
-primary_essence_stat_rating = df_et.loc[df_et["Stat"] == class_primary[l_class]][
-    "Value"
-]
 # %% loop through equipment slots
 for equipment_slot in equipment_slot_list:
+    # build data dfs
+    maw = [10, 11, 12]  # ["Might", "Agility", "Will"]
+    not_maw = [i for i in range(32) if i not in maw]
+    df_idb_maw = pd.read_csv(
+        r".\data\ItemDatabase.csv",
+        usecols=[
+            "ItemID",
+            "Might",
+            "Agility",
+            "Will",
+            "EquipSlot",
+            "PrimaryEssence",
+        ],
+    ).fillna(0)
+    df_idb_not_maw = pd.read_csv(
+        r".\data\ItemDatabase.csv",
+        usecols=not_maw,
+    ).fillna(0)
+    df_et = pd.read_csv(
+        r".\data\EssenceValues.csv",
+        usecols=["Stat", essence_tier],
+    ).rename(columns={essence_tier: "Value"})
+    df_msd = pd.read_csv(
+        r".\data\MainStatDerivations.csv",
+    )
+    primary_essence_stat_rating = df_et.loc[df_et["Stat"] == class_primary[l_class]][
+        "Value"
+    ]
     # Filter initals DFs according to the controlling variables
     df_msd = df_msd.loc[df_msd["L_CLASS"] == l_class]
     df_idb_maw = df_idb_maw.loc[df_idb_maw["EquipSlot"] == equipment_slot]
@@ -124,7 +124,7 @@ for equipment_slot in equipment_slot_list:
             ,sum(ifnull(i.Tactical_Mitigation, 0) + ds.Tactical_Mitigation)
                 as Tactical_Mitigation
             ,sum(ifnull(i.Critical_Rating, 0) + ds.Critical_Rating) as Critical_Rating
-            ,ifnull(i.Critical_Defence, 0) as Critical_Defense
+            ,ifnull(i.Critical_Defense, 0) as Critical_Defense
             ,ifnull(i.Finesse_Rating, 0) as Finesse_Rating
             ,sum(ifnull(i.Block_Rating, 0) + ds.Block) as Block_Rating
             ,sum(ifnull(i.Parry_Rating, 0) + ds.Parry) as Parry_Rating
@@ -133,7 +133,6 @@ for equipment_slot in equipment_slot_list:
                 as Outgoing_Healing_Rating
             ,ifnull(i.Incoming_Healing_Rating, 0) as Incoming_Healing_Rating
             ,sum(ifnull(i.Resistance_Rating, 0) + ds.Resistance) as Resistance_Rating
-            ,ifnull(i.Maximum_Morale, 0) as Maximum_Moral
             ,ifnull(i.Maximum_Power, 0) as Maximum_Power
             ,ifnull(i.PrimaryEssence, 0) as Primary_Essence
             ,ifnull(i.VitalEssence, 0) as Vital_Essence
@@ -151,17 +150,12 @@ for equipment_slot in equipment_slot_list:
             ,i.Armour
             ,i.Fate
             ,i.Vitality
-            ,i.Critical_Defence
-            ,i.Finesse_Rating
-            ,i.Critical_Defence
-            ,i.Finesse_Rating
-            ,i.Critical_Defence
             ,i.Finesse_Rating
             ,i.Incoming_Healing_Rating
-            ,i.Maximum_Morale
             ,i.Maximum_Power
             ,i.PrimaryEssence
             ,i.VitalEssence
+            ,i.Critical_Defense
             ,i.BasicEssence
             ,i.DPS
             ,i.minDamage
