@@ -37,7 +37,7 @@ equipment_slot_list = (
 maw = [3, 4, 5]  # ["Might", "Agility", "Will"]
 not_maw = [i for i in range(32) if i not in maw]
 df_idb_maw = pd.read_csv(
-    r".\ItemDatabase.csv",
+    r".\data\ItemDatabase.csv",
     usecols=[
         "ItemID",
         "Might",
@@ -48,15 +48,15 @@ df_idb_maw = pd.read_csv(
     ],
 ).fillna(0)
 df_idb_not_maw = pd.read_csv(
-    r".\ItemDatabase.csv",
+    r".\data\ItemDatabase.csv",
     usecols=not_maw,
 ).fillna(0)
 df_et = pd.read_csv(
-    r".\EssenceValues.csv",
+    r".\data\EssenceValues.csv",
     usecols=["Stat", essence_tier],
 ).rename(columns={essence_tier: "Value"})
 df_msd = pd.read_csv(
-    r".\MainStatDerivations.csv",
+    r".\data\MainStatDerivations.csv",
 )
 primary_essence_stat_rating = df_et.loc[df_et["Stat"] == class_primary[l_class]][
     "Value"
