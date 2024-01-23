@@ -7,8 +7,8 @@ import polars as pl
 
 # File path to the most recent Lotro-Companion xml items db
 # Download from https://github.com/LotroCompanion/lotro-items-db
-items_xml_fp = r"../items.xml"
-save_pth = r"../lotro_items.csv"
+items_xml_fp = r".\data\items.xml"
+save_pth = r".\data\PostXMLItems.csv"
 
 STAT_NAME_MAP = {
     "VITALITY": "Vitality Scaling",
@@ -250,15 +250,15 @@ def clean_items_df(df):
 
 
 # Example call: Python item_parsing.py -f u35_items.xml -s u35_items.csv
-def main(args):
+def main(items_fp=items_xml_fp, save_fp=save_pth):
     # Make sure xml file path exists
-    if not os.path.isfile(args.items_fp):
-        print(f"File '{args.items_fp}' does not exist.")
+    if not os.path.isfile(items_fp):
+        print(f"File '{items_fp}' does not exist.")
         return -1
 
-    df = parse_items_xml(fp=args.items_fp)
+    df = parse_items_xml(items_fp)
     df = clean_items_df(df)
-    df.write_csv(args.save_fp)
+    df.write_csv(save_fp)
 
 
 if __name__ == "__main__":
