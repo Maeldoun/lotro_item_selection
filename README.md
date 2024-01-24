@@ -2,14 +2,14 @@ Purpose:
 The purpose of this program is to allow the user to find the best items available considering the item slot and essence values
 
 Setup (main.exe):
-* If you trust me, then you can just clone down the 150ItemInfo.ods and the main.exe.
+* If you trust me, then you can just clone down the data folder and the main.exe.
 * Run the main.exe and tell windows you're not scared to run it.
 
 Setup (Python):
 * Clone this repository
 * Open a cmd prompt or powershell prompt
 * cd to the cloned repository
-* Install Python (3.11 is what I used)
+* Install Python (3.11 is what I used, but more recent won't work until packages are upadeted for 3.12)
 * Optionally create a Virtual Environment using the requirments txt file.
   * python -m venv .venv
   * activate the environment
@@ -19,7 +19,7 @@ Setup (Python):
   * pip install -r requirements.txt
 
 Use:
-* Update the 150ItemInfo.ods file's "Control" sheet with the desired class, stats, equipment slot, etc
+* Update the Control.csv with the desired class, stats, equipment slot, etc
 * Run the python script from your virtual environment (assming you're still in an active environment)
   * python main.py
 * You should get a screen that shows the item and a new file should be created in the current directory called top_items.csv.
@@ -36,4 +36,4 @@ Big thank you to Kruelle for the scripts to parse the .xml files. It saved me a 
 
 NOTE: the csv that is generated will create if it doesn't exist or append to a created existing file.
 
-TODO: make a gui, so the spreadsheet doesn't control it
+TODO: make a gui, so the Control.csv doesn't control it
