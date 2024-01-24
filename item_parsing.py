@@ -1,3 +1,5 @@
+# this script comes almost entirely from Kruelle. I only minorly updated it to filter and execute the way I wanted
+# https://github.com/Kruelle/LOTRO-Essence-Value-Calculator
 import argparse
 import os
 import xml.etree.ElementTree as ETree
