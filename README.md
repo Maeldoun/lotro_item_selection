@@ -25,10 +25,15 @@ Use:
 * You should get a screen that shows the item and a new file should be created in the current directory called top_items.csv.
 * You can review that csv file for more details.
 
-NOTE: the 150ItemInfo.ods was given to me, and I can't verify it's validity.
+Database Creation:
+* If you need to refresh the "database", you can:
+  * Download the items.xml and progression.xml files from lotro-companion
+  * Make sure the files are saved into the "data" folder
+  * Run main_db.py
+  * NOTE: if the parsing of the xml files fails, I didn't write the scripts, I got the from Kruelle, and I won't be able to assit in troublshooting immediately
+
+Big thank you to Kruelle for the scripts to parse the .xml files. It saved me a bunch of work to largely rely on his scripts.
 
 NOTE: the csv that is generated will create if it doesn't exist or append to a created existing file.
-
-TODO: automate item lists
 
 TODO: make a gui, so the spreadsheet doesn't control it
