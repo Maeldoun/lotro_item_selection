@@ -4,12 +4,19 @@ best items from the available items in the ItemDatabase.csv
 """
 # %% importng packages
 import os
+from pathlib import Path
 
 import duckdb as ddb
 import pandas as pd
 
+control_file = Path("./Control.csv")
+item_db = Path("./data/ItemDatabase.csv")
+ev_db = Path("./data/EssenceValues.csv")
+msd_db = Path("./data/MainStatDerivations.csv")
+output_csv = Path("./top_items.csv")
+
 # %% set controling variables
-df_control = pd.read_csv(r".\Control.csv")
+df_control = pd.read_csv(control_file)
 class_primary = {
     "Beorning": "Might",
     "Brawler": "Might",
@@ -39,7 +46,7 @@ for equipment_slot in equipment_slot_list:
     maw = [10, 11, 12]  # ["Might", "Agility", "Will"]
     not_maw = [i for i in range(32) if i not in maw]
     df_idb_maw = pd.read_csv(
-        r".\data\ItemDatabase.csv",
+        item_db,
         usecols=[
             "ItemID",
             "Might",
@@ -50,16 +57,14 @@ for equipment_slot in equipment_slot_list:
         ],
     ).fillna(0)
     df_idb_not_maw = pd.read_csv(
-        r".\data\ItemDatabase.csv",
+        item_db,
         usecols=not_maw,
     ).fillna(0)
     df_et = pd.read_csv(
-        r".\data\EssenceValues.csv",
+        ev_db,
         usecols=["Stat", essence_tier],
     ).rename(columns={essence_tier: "Value"})
-    df_msd = pd.read_csv(
-        r".\data\MainStatDerivations.csv",
-    )
+    df_msd = pd.read_csv(msd_db)
     primary_essence_stat_rating = df_et.loc[df_et["Stat"] == class_primary[l_class]][
         "Value"
     ]
@@ -248,10 +253,10 @@ for equipment_slot in equipment_slot_list:
     df_final = df_final_equipment.to_df()
     df_final.reset_index(drop=True, inplace=True)
 
-    if not os.path.exists(r".\top_items.csv"):
-        df_final.to_csv(r".\top_items.csv")
+    if not os.path.exists(output_csv):
+        df_final.to_csv(output_csv)
     else:
-        df_final.to_csv(r".\top_items.csv", mode="a", header=False)
+        df_final.to_csv(output_csv, mode="a", header=False)
 
 # %%
 input("Press the Enter key to close (or x in top right)")

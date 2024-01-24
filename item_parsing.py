@@ -3,14 +3,15 @@
 import argparse
 import os
 import xml.etree.ElementTree as ETree
+from pathlib import Path
 from unicodedata import normalize
 
 import polars as pl
 
 # File path to the most recent Lotro-Companion xml items db
 # Download from https://github.com/LotroCompanion/lotro-items-db
-items_xml_fp = r".\data\items.xml"
-save_pth = r".\data\PostXMLItems.csv"
+items_xml_fp = Path("./data/items.xml")
+save_pth = Path("./data/PostXMLItems.csv")
 
 STAT_NAME_MAP = {
     "VITALITY": "Vitality Scaling",

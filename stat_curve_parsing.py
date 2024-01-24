@@ -3,13 +3,14 @@
 import argparse
 import os
 import xml.etree.ElementTree as ETree
+from pathlib import Path
 
 import numpy as np
 import polars as pl
 
 # File path to the most recent Lotro-Companion xml items db
 # Download from https://raw.githubusercontent.com/LotroCompanion/lotro-data/master/common/progressions.xml
-curves_xml_fp = r".\data\progressions.xml"
+curves_xml_fp = Path("./data/progressions.xml")
 
 
 def parse_curves(fp=curves_xml_fp, ilvl_cutoff=599):
@@ -126,7 +127,7 @@ def main():
     df = df.with_columns(
         pl.all().exclude("iLvl").cast(pl.Float64), pl.col("iLvl").cast(pl.UInt16)
     )
-    df.write_csv(r".\data\ScalingStatValues.csv")
+    df.write_csv(Path("./data/ScalingStatValues.csv"))
 
 
 if __name__ == "__main__":

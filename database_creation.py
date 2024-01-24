@@ -1,11 +1,16 @@
 # %%
+from pathlib import Path
+
 import duckdb as ddb
 import pandas as pd
 
 ILVL_FILTER = 500
+post_xml_items = Path("./data/PostXMLItems.csv")
+scaling_stats = Path("./data/ScalingStatValues.csv")
+item_db_output = Path("./data/ItemDatabase.csv")
 # %%
 df_item_data = pd.read_csv(
-    r".\data\PostXMLItems.csv",
+    post_xml_items,
     usecols=[
         "itemId",
         "iLvl",
@@ -55,7 +60,7 @@ df_unpivot_item = ddb.sql(
 
 # %%
 
-df_scaling_stat_values = pd.read_csv(r".\data\ScalingStatValues.csv")
+df_scaling_stat_values = pd.read_csv(scaling_stats)
 df_scaling_stat_values = df_scaling_stat_values.loc[
     df_scaling_stat_values["iLvl"].between(ILVL_FILTER, ILVL_FILTER + 50)
 ]
@@ -94,7 +99,7 @@ df_item_stat = ddb.sql(
 )
 # %%
 df_item_data = pd.read_csv(
-    r".\data\PostXMLItems.csv",
+    post_xml_items,
     usecols=[
         "itemId",
         "itemName",
@@ -154,7 +159,6 @@ df_item_database = ddb.sql(
     JOIN df_item_stat ist on id.itemId = ist.itemId
     """
 )
-df_item_database.show(max_width=1000)
 # %%
 df_final = df_item_database.to_df()
-df_final.to_csv(r".\data\ItemDatabase.csv")
+df_final.to_csv(item_db_output)
