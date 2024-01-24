@@ -1,6 +1,8 @@
 Purpose: 
 The purpose of this program is to allow the user to find the best items available considering the item slot and essence values
 
+If using MacOS, you need to remove pywin32 from the requirements.txt and fix the paths to the files to be in the correct format.
+
 Setup (main.exe):
 * If you trust me, then you can just clone down the data folder and the main.exe.
 * Run the main.exe and tell windows you're not scared to run it.
