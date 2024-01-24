@@ -7,7 +7,7 @@ import polars as pl
 
 # File path to the most recent Lotro-Companion xml items db
 # Download from https://raw.githubusercontent.com/LotroCompanion/lotro-data/master/common/progressions.xml
-curves_xml_fp = "/Users/brand/Desktop/Lotro Items Python Sandbox/stat_progressions.xml"
+curves_xml_fp = r".\data\progressions.xml"
 
 
 def parse_curves(fp=curves_xml_fp, ilvl_cutoff=599):
@@ -114,17 +114,17 @@ def parse_curves(fp=curves_xml_fp, ilvl_cutoff=599):
 
 
 # Example call: Python stat_curve_parsing.py -f u35_progressions.xml -s u35_progressions.csv
-def main(args):
+def main():
     # Make sure xml file path exists
-    if not os.path.isfile(args.stat_curves_fp):
-        print(f"File '{args.stat_curves_fp}' does not exist.")
+    if not os.path.isfile(curves_xml_fp):
+        print(f"File '{curves_xml_fp}' does not exist.")
         return -1
 
-    df = parse_curves(fp=args.stat_curves_fp, ilvl_cutoff=args.ilvl_cutoff)
+    df = parse_curves(curves_xml_fp)
     df = df.with_columns(
         pl.all().exclude("iLvl").cast(pl.Float64), pl.col("iLvl").cast(pl.UInt16)
     )
-    df.write_csv(args.save_fp)
+    df.write_csv(r".\data\ScalingStatValues.csv")
 
 
 if __name__ == "__main__":
