@@ -1,8 +1,6 @@
 Purpose: 
 The purpose of this program is to allow the user to find the best items available considering the item slot and essence values
 
-If using MacOS, you need to remove pywin32 from the requirements.txt.
-
 Setup (main.exe):
 * If you trust me, then you can just clone down the data folder and the main.exe.
 * Run the main.exe and tell windows you're not scared to run it.
@@ -34,7 +32,10 @@ Database Creation:
   * Run main_db.py
   * NOTE: if the parsing of the xml files fails, I didn't write the scripts, I got the from Kruelle, and I won't be able to assit in troublshooting immediately
 
-Big thank you to Kruelle for the scripts to parse the .xml files. It saved me a bunch of work to largely rely on his scripts.
+Thanks to Kylar for the idea, testing, troubleshooting, motivating, documenting, and colaboration. This wouldn't exist otherwise.
+Thanks to Kruelle for the scripts to parse the .xml files. 
+Thanks to Dramacus for helping me make it work on non-windows machines.
+
 
 NOTE: the csv that is generated will create if it doesn't exist or append to a created existing file.
 
